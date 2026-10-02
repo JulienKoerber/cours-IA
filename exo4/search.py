@@ -148,4 +148,21 @@ def depth_first_search(
     goal: State,
 ) -> list[State]:
     """Return a path using Depth-First Search."""
-    ...
+    if start == goal:
+        return [start]
+
+    frontier = [start]
+    parents: dict[State, State | None] = {start: None}
+
+    while frontier:
+        current = frontier.pop()
+
+        if current == goal:
+            return _reconstruct_path(parents, goal)
+
+        for next_state in reversed(successors(game_map, current)):
+            if next_state not in parents:
+                parents[next_state] = current
+                frontier.append(next_state)
+
+    return []
